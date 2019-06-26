@@ -1,0 +1,24 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+Public Sub Main()
+
+
+
+End Sub
+
+Public Sub getId()
+Dim maxId As String
+
+maxId = Worksheets("data").Cells(1, 1).End(xlDown).Value
+Worksheets("Œ´Ž†").Cells
+
+End Sub

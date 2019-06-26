@@ -1,0 +1,32 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet23"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+
+Private Sub ComboBox2_Change()
+
+End Sub
+
+Private Sub CommandButton1_Click()
+On Error GoTo EXS
+
+Dim DIA As FileDialog
+Set DIA = Application.FileDialog(msoFileDialogFolderPicker)
+
+DIA.Show
+DIA.Title = "保存先のフォルダを指定してください。"
+ActiveWorkbook.Worksheets("設定").Range("D3").Value = DIA.SelectedItems(1)
+
+Exit Sub
+
+EXS:
+
+End Sub
+

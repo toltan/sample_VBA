@@ -1,0 +1,35 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+Private Sub Workbook_Open()
+Dim A, book As String
+Dim sRange, i As Range
+Dim r, c As Integer
+Dim nowS, actS As Worksheet
+
+Set nowS = ActiveSheet
+ActiveWorkbook.Worksheets("設定").Range("A1").Value = ActiveWorkbook.Name
+A = ActiveWorkbook.Worksheets("設定").Range("A1").Value
+Call WO(A)
+Set actS = Worksheets("設定")
+actS.Activate
+Set sRange = Worksheets("設定").Cells.Find(what:="サプライヤー一覧").Offset(1, 0)
+r = sRange.Row
+c = sRange.Column
+
+For Each i In Range(Cells(r, c), Cells(Rows.Count, c).End(xlUp))
+Worksheets("設定").ComboBox1.AddItem (i.Text)
+Next
+Worksheets("設定").ComboBox2.AddItem ("重慶流動品")
+Worksheets("設定").ComboBox2.AddItem ("重慶保留品")
+nowS.Activate
+
+End Sub

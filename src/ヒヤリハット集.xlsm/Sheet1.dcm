@@ -1,0 +1,151 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+
+Private Sub SpinButton1_Change()
+Dim reporter As Integer '報告者
+Dim actDay As Integer '発生日時
+Dim category As Integer '事故分類
+Dim title As Integer '題名
+Dim admin As Integer '管理者
+
+With Worksheets("data")
+
+    reporter = .Rows(1).Find(what:="報告者", lookat:=xlWhole).Column
+    actDay = .Rows(1).Find(what:="発生日時", lookat:=xlWhole).Column
+    category = .Rows(1).Find(what:="事故分類", lookat:=xlWhole).Column
+    title = .Rows(1).Find(what:="題名", lookat:=xlWhole).Column
+    admin = .Rows(1).Find(what:="管理者", lookat:=xlWhole).Column
+    
+End With
+
+With Worksheets("原紙")
+
+    .Range("K2").Value = Me.SpinButton1.Value 'IDの値
+    .Range("J3").Value = Worksheets("data").Cells(Me.SpinButton1.Value + 1, reporter).Value '報告者の値
+    .Range("J4").Value = Worksheets("data").Cells(Me.SpinButton1.Value + 1, actDay).Value '発生日時
+    .Range("J5").Value = Worksheets("data").Cells(Me.SpinButton1.Value + 1, category).Value
+    .Range("B6").Value = Worksheets("data").Cells(Me.SpinButton1.Value + 1, title).Value
+    .Range("A30").Value = Worksheets("data").Cells(Me.SpinButton1.Value + 1, admin).Value
+    
+End With
+
+Call checkVal 'チェックボックスの値を取得
+Call contents '内容 配列を使い、コンマ区切りの文章を各行に入力する。
+Call genin(1)
+Call genin(2)
+Call genin(3)
+Call adminComment
+
+End Sub
+
+Public Sub checkVal() 'チェックボックスの値を取得
+Dim checkboxes As OLEObject 'チェックボックス
+Dim importance As String '重要度
+
+    importance = Worksheets("data"). _
+    Cells(Me.SpinButton1.Value + 1, Worksheets("data").Rows(1).Find(what:="重要度", lookat:=xlWhole).Column).Value
+  
+    For Each checkboxes In ActiveSheet.OLEObjects 'チェックボックスの値
+        If TypeName(checkboxes.Object) = "CheckBox" Then
+                If checkboxes.Object.Caption = importance Then
+                    checkboxes.Object.Value = True
+                Else
+                    checkboxes.Object.Value = False
+                End If
+        End If
+    Next
+
+End Sub
+
+
+Public Sub contents() '内容欄の変更
+Dim iRow As Integer '内容文の行数
+Dim contents As String '内容
+Dim v As Variant, contVar As Variant '内容の配列
+
+iRow = 8
+contents = Worksheets("data").Rows(1).Find(what:="内容", lookat:=xlWhole). _
+Offset(Me.SpinButton1.Value, 0)
+contVar = Split(contents, ",,")
+
+With Worksheets("原紙")
+
+    .Range(Cells(8, 1), Cells(16, 6)).ClearContents
+
+    For Each v In contVar
+        If v = "" Then v = ""
+        .Cells(iRow, 1).Value = v
+        iRow = iRow + 1
+    Next
+
+End With
+End Sub
+
+Public Sub genin(ByVal a As Integer)
+Dim gen As String, findVal As String '内容
+Dim v As Variant, contVar As Variant '内容の配列
+Dim iRow As Integer
+
+Select Case a
+    Case 1
+    findVal = "原因"
+    iRow = 18
+    Case 2
+    findVal = "対策"
+    iRow = 22
+    Case 3
+    findVal = "要望・提案"
+    iRow = 26
+End Select
+
+gen = Worksheets("data").Rows(1).Find(what:=findVal, lookat:=xlWhole). _
+Offset(Me.SpinButton1.Value, 0)
+contVar = Split(gen, ",,")
+
+With Worksheets("原紙")
+
+    .Range(Cells(iRow, 2), Cells(iRow + 2, 2)).ClearContents
+
+    For Each v In contVar
+        If v = "" Then v = ""
+        .Cells(iRow, 2).Value = v
+        iRow = iRow + 1
+    Next
+
+End With
+
+
+End Sub
+
+Public Sub adminComment()
+Dim adCom As String
+Dim v As Variant, contVar As Variant '内容の配列
+Dim iRow As Integer
+
+adCom = Worksheets("data").Rows(1).Find(what:="管理者記入事項", lookat:=xlWhole). _
+Offset(Me.SpinButton1.Value, 0)
+contVar = Split(adCom, ",,")
+iRow = 31
+
+With Worksheets("原紙")
+
+    .Range(Cells(iRow, 1), Cells(iRow + 2, 1)).ClearContents
+
+    For Each v In contVar
+        If v = "" Then v = ""
+        .Cells(iRow, 1).Value = v
+        iRow = iRow + 1
+    Next
+
+End With
+
+
+End Sub

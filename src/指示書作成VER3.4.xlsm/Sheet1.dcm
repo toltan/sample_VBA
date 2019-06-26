@@ -1,0 +1,35 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+Sub NN()
+Dim A As Variant
+A = Array("KLFKF", "LLLL", "YY")
+A(0) = "KLFKF"
+A(1) = "LLLL"
+A(2) = "YY"
+
+If IsArray(A) Then
+MsgBox (UBound(A))
+End If
+End Sub
+
+Sub Sample()
+    Dim A(10) As Variant, b(10, 1 To 5) As Variant, C As Variant
+    C = Array(1, 2, 3)
+    MsgBox UBound(A)
+    MsgBox UBound(b, 1)
+    MsgBox UBound(C)
+End Sub
+
+
+
+Private Sub CommandButton1_Click()
+UserForm3.Show (vbModeless)
+End Sub

@@ -1,0 +1,35 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+Public Sub Workbook_Open()
+
+    If Worksheets("設定").Range("E1").Value = 0 Then
+    MsgBox ("システムに変更がありました。設定をやり直してください。"), vbInformation
+    Worksheets("設定").Range("E1").Value = Worksheets("設定").Range("E1").Value + 1
+    MsgBox (Worksheets("更新").Range("A1").Value)
+    ActiveWorkbook.Save
+    ElseIf Worksheets("設定").Range("F1").Value <> Month(Now) Then
+    MsgBox ("稼働月が変わりました。設定をやり直してください。"), vbInformation
+    Worksheets("設定").Range("F1").Value = Month(Now)
+    ActiveWorkbook.Save
+    End If
+    
+Worksheets("設定").Range("B1").Value = ActiveWorkbook.Name
+
+  With UserForm2.ComboBox1
+  .AddItem ("****")
+  .AddItem ("****")
+  End With
+
+WWW = Worksheets("設定").Range("B1").Value
+
+UserForm1.Show (vbModeless)
+
+End Sub
